@@ -1,28 +1,53 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+
+import Header from './components/Header';
 
 class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
-    );
-  }
+    constructor() {
+        super();
+
+        this.state = {
+            movies: []
+        }
+    }
+
+    // Use this method to make external API calls
+    componentDidMount() {
+        let dataUrl = "http://wp-react.local/wp-json/wp/v2/movie";
+
+        fetch(dataUrl)
+          .then(response => response.json())
+          .then(results => {
+              this.setState({
+                  movies: results
+              })
+          })
+    }
+
+    renderMovies = () => {
+        return (
+            this.state.movies.map( (movie, index) =>
+                <article className="movie" key={index}>
+                    <h3>{movie.title.rendered}<sup>{movie.acf.genre}</sup></h3>
+                    <h4>{movie.acf.director}</h4>
+                    <p>{movie.acf.date_of_release}</p>
+                </article>
+            )
+        )
+    }
+
+    render() {
+        let movies = this.renderMovies();
+
+        return(
+            <main>
+                <Header/>
+                
+                <h2>Movies</h2>
+                {movies}
+            </main>
+        )
+    }
 }
 
 export default App;

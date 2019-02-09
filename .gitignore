@@ -1,0 +1,9 @@
+*
+
+!.gitignore
+
+!wp-content/
+!wp-content/themes/
+!wp-content/themes/react/
+!wp-content/themes/react/*
+
